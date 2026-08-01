@@ -1,0 +1,80 @@
+.patient-trial-container {
+	display: flex;
+	gap: 2em;
+	margin: 1em 1em;
+}
+
+.trial-sidebar {
+	position: sticky;
+        position: -webkit-sticky;
+        top: 0;
+        align-self: flex-start;
+	max-width: 275px;
+	min-width: 275px;
+	background-color: #e6e6e6;
+	padding: 0.5em;
+	min-height: 150px;
+	border-bottom-right-radius: 0.5em;
+	border-bottom-left-radius: 0.5em;
+	border-top-right-radius: 0.5em;
+	border-top-left-radius: 0.5em;
+}
+
+.trial-sidebar-title {
+        margin: 0.5em 0em;
+}
+
+.patient-grid {
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(4, 1fr); /* Always 8 rows */
+	grid-auto-columns: 100px;           /* Width of each new column */
+	gap: 16px;
+}
+
+.trial-sidebar-description {
+	font-size: 0.8em;
+}
+
+#illness-search {
+	width: 100%;
+	padding: 0.5em;
+}
+
+.patient > h5 {
+	margin: 0;
+	margin-top: 0.25em;
+}
+
+.patient > img {
+	float: left;
+	padding-right: 0.5em;
+	padding-bottom: 0.5em;
+margin: 0.25em;
+}
+
+.patient {
+	background-color: rgb(255, 238, 238);
+	border-bottom-right-radius: 0.5em;
+	border-bottom-left-radius: 0.5em;
+	border-top-right-radius: 0.5em;
+	border-top-left-radius: 0.5em;
+}
+
+.patient > p {
+	padding: 0.5em;
+	margin: 0;
+}
+
+#found-studies > li {
+	cursor: pointer;
+	margin-bottom: 1em;
+}
+
+#found-studies > li > div > p {
+	margin-top: 0;
+}
+
+#found-studies > li:hover {
+	background-color: #d2d2d2;
+}
