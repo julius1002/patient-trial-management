@@ -50,7 +50,7 @@
 	float: left;
 	padding-right: 0.5em;
 	padding-bottom: 0.5em;
-margin: 0.25em;
+	margin: 0.25em;
 }
 
 .patient {
@@ -66,9 +66,29 @@ margin: 0.25em;
 	margin: 0;
 }
 
+.patient > div {
+	margin: 0 auto;
+        width: 80%;
+	border-bottom-right-radius: 0.5em;
+	border-bottom-left-radius: 0.5em;
+	border-top-right-radius: 0.5em;
+	border-top-left-radius: 0.5em;
+	background-color: #e6e6e6;
+	cursor: pointer;
+	font-weight: bold;
+	padding: 0.2em;
+	text-align: center;
+	vertical-align: middle;
+}
+
 #found-studies > li {
 	cursor: pointer;
 	margin-bottom: 1em;
+	padding: 0.5em;
+	border-bottom-right-radius: 0.5em;
+	border-bottom-left-radius: 0.5em;
+	border-top-right-radius: 0.5em;
+	border-top-left-radius: 0.5em;
 }
 
 #found-studies > li > div > p {
@@ -77,4 +97,10 @@ margin: 0.25em;
 
 #found-studies > li:hover {
 	background-color: #d2d2d2;
+	text-decoration: underline;
+}
+
+.selected {
+	background-color: #d2d2d2;
+	text-decoration: underline;
 }

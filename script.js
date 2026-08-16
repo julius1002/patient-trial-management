@@ -1,6 +1,13 @@
-import { fromEvent, map, switchMap, from, debounceTime } from "https://esm.sh/rxjs";
+import { fromEvent, map, switchMap, from, debounceTime, of } from "https://esm.sh/rxjs";
 
-const clinicalTrialsQueryCondUrl = "https://clinicaltrials.gov/api/v2/studies?pageSize=5&query.cond=";
+// if this is enabled, the same users will be fetched all the time
+const useMockData = true;
+
+// here starts a large object, that holds some mockdata. In order to not fetch the randomuser api all the time.
+
+const mockData = undefined;
+
+const clinicalTrialsQueryCondUrl = "https://clinicaltrials.gov/api/v2/studies?pageSize=15&query.cond=";
 
 const randomUsersUrl = "https://randomuser.me/api/?results=20";
 
@@ -12,8 +19,17 @@ const foundStudies = document.getElementById("found-studies");
 
 const patientGrid = document.getElementsByClassName("patient-grid")[0];
 
+var selectedStudy = undefined;
+
 function addStudy(studyObj) {
 	const study = document.createElement("li");
+	study.addEventListener("click", function(event) { 
+						if(selectedStudy) {
+							selectedStudy.removeAttribute("class", "selected"); 
+						}
+						study.setAttribute("class", "selected"); 
+						selectedStudy = study; 
+					     });
 	const div = document.createElement("div");
 	const studyNameElem = document.createElement("p");
 	studyNameElem.textContent = studyObj.protocolSection.identificationModule.briefTitle;
@@ -27,7 +43,6 @@ function addStudy(studyObj) {
 	foundStudies.appendChild(study);
 }
 
-// illnessSearchInput$.subscribe(event => { console.log("input!", event.target.value); });
 illnessSearchInput$.pipe(
 		map(event => event.target.value),
 		debounceTime(600),
@@ -59,14 +74,16 @@ function addPatient(name, conditions, phone, mail, imgUrl) {
 	mailElem.textContent = "Mail: " + mail;
 	newPatient.appendChild(mailElem);
 
-	const assignBtn = document.createElement("button");
-	assignBtn.textContent = "Assign to selected trial";
-	newPatient.appendChild(assignBtn);
+	const assignBtnDiv = document.createElement("div");
+
+	assignBtnDiv.textContent = "Assign to selected trial";
+	newPatient.appendChild(assignBtnDiv);
 
 	patientGrid.appendChild(newPatient);
 }
 
-from(fetch(randomUsersUrl).then(response => response.json()))
+
+(!useMockData || !mockData ? from(fetch(randomUsersUrl).then(response => response.json())) : of(mockData))
 	.pipe(map(response => response.results))
 	.subscribe(results => 
 			{ results.forEach(result => { 
