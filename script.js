@@ -84,7 +84,6 @@ function addPatient(name, conditions, phone, mail, imgUrl) {
 
 	assignBtnDiv.textContent = "Assign to selected clinical trial";
 	assignBtnDiv.addEventListener("click", () => {
-
 			const assignedParticipantList = document.createElement("ul");
 			const assignedParticipant = document.createElement("li");
 			assignedParticipant.textContent = name + ", " + phone;
