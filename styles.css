@@ -2,6 +2,8 @@
 	display: flex;
 	gap: 2em;
 	margin: 1em 1em;
+	align-items: flex-start;
+
 }
 
 .trial-sidebar {
@@ -25,7 +27,7 @@
 }
 
 .patient-grid {
-	width: 100%;
+	max-width: 100%;
 	display: grid;
 	grid-template-columns: repeat(4, 1fr); /* Always 8 rows */
 	grid-auto-columns: 100px;           /* Width of each new column */
@@ -103,4 +105,16 @@
 .selected {
 	background-color: #d2d2d2;
 	text-decoration: underline;
+}
+
+.invisible {
+	display: none;
+}
+
+#report-btn {
+	margin: 1em auto;
+	cursor: pointer;
+	width: 80%;
+        justify-content: center;
+	font-weight: bold;
 }

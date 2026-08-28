@@ -21,7 +21,12 @@ const patientGrid = document.getElementsByClassName("patient-grid")[0];
 
 var selectedStudy = undefined;
 
+var state = { studyToPatients : [] };
+
 function addStudy(studyObj) {
+	if(state.studyToPatients.length == 0) {
+		document.getElementById("report-btn").classList.remove("invisible");
+	}
 	const study = document.createElement("li");
 	study.addEventListener("click", function(event) { 
 						if(selectedStudy) {
@@ -33,9 +38,11 @@ function addStudy(studyObj) {
 			      );
 	const div = document.createElement("div");
 	const studyNameElem = document.createElement("p");
-	studyNameElem.textContent = studyObj.protocolSection.identificationModule.briefTitle;
+        const briefTitle = studyObj.protocolSection.identificationModule.briefTitle
+	state.studyToPatients.push({ name: briefTitle, patients : [] });
+	
+	studyNameElem.textContent = briefTitle;
 	const placeNameElem = document.createElement("p");
-	console.log(studyObj);
 	placeNameElem.textContent = studyObj.protocolSection.identificationModule.organization.fullName;
 	div.appendChild(studyNameElem);
 	div.appendChild(placeNameElem);
@@ -46,7 +53,6 @@ function addStudy(studyObj) {
 	assignedParticipantTitle.textContent = "Assigned patients (name, phone)";
 	assignedParticipantDiv.appendChild(assignedParticipantTitle);
 	study.appendChild(assignedParticipantDiv);
-
 }
 
 illnessSearchInput$.pipe(
@@ -83,25 +89,34 @@ function addPatient(name, conditions, phone, mail, imgUrl) {
 	const assignBtnDiv = document.createElement("div");
 
 	assignBtnDiv.textContent = "Assign to selected clinical trial";
-	assignBtnDiv.addEventListener("click", () => {
-			const assignedParticipantList = document.createElement("ul");
-			const assignedParticipant = document.createElement("li");
-			assignedParticipant.textContent = name + ", " + phone;
-			assignedParticipantList.appendChild(assignedParticipant);
-			selectedStudy.appendChild(assignedParticipantList);
+	assignBtnDiv.addEventListener("click", (event) => {
+		const assignedParticipantList = document.createElement("ul");
+		const assignedParticipant = document.createElement("li");
+		const nameAndPhone = name + ", " + phone
+		assignedParticipant.textContent = nameAndPhone;
+		assignedParticipantList.appendChild(assignedParticipant);
+		selectedStudy.appendChild(assignedParticipantList);
+		var studyIndex = Array.prototype.indexOf.call(foundStudies.childNodes, selectedStudy)
+		state.studyToPatients[studyIndex].patients.push(nameAndPhone);
+
 		}
 	);
 	newPatient.appendChild(assignBtnDiv);
-
 	patientGrid.appendChild(newPatient);
 }
 
+function createReport() {
+	console.log(state);
+	// TODO create report from state
+}
+
+document.getElementById("report-btn").addEventListener("click", createReport); 
 
 (!useMockData || !mockData ? from(fetch(randomUsersUrl).then(response => response.json())) : of(mockData))
 	.pipe(map(response => response.results))
 	.subscribe(results => { 
-			results.forEach(result => { 
-			const fullName = result.name.title + ". " + result.name.first + " " + result.name.last;
-			addPatient(fullName, ["Colon Cancer", "Diabetes"], result.phone, result.email, result.picture.medium);
+		results.forEach(result => { 
+		const fullName = result.name.title + ". " + result.name.first + " " + result.name.last;
+		addPatient(fullName, ["Anxiety", "Diabetes"], result.phone, result.email, result.picture.medium);
 		})
 	});
