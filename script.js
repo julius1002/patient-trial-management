@@ -20,6 +20,7 @@ const foundStudies = document.getElementById("found-studies");
 const patientGrid = document.getElementsByClassName("patient-grid")[0];
 
 var selectedStudy = undefined;
+var selectedStudyTitle = "";
 
 var state = { studyToPatients : [] };
 
@@ -29,13 +30,14 @@ function addStudy(studyObj) {
 	}
 	const study = document.createElement("li");
 	study.addEventListener("click", function(event) { 
-						if(selectedStudy) {
-							selectedStudy.removeAttribute("class", "selected"); 
-						}
-						study.setAttribute("class", "selected"); 
-						selectedStudy = study; 
-					}
-			      );
+	  		if(selectedStudy) {
+	  			selectedStudy.removeAttribute("class", "selected"); 
+	  		}
+	  		study.setAttribute("class", "selected"); 
+	  		selectedStudy = study; 
+	  		selectedStudyTitle = event.target.innerText;
+	  	}
+	);
 	const div = document.createElement("div");
 	const studyNameElem = document.createElement("p");
         const briefTitle = studyObj.protocolSection.identificationModule.briefTitle
@@ -70,7 +72,7 @@ function addPatient(name, conditions, phone, mail, imgUrl) {
 	patientImg.src = imgUrl;
 	newPatient.appendChild(patientImg);
 
-	const patientName = document.createElement("h4");
+	const patientName = document.createElement("h3");
 	patientName.textContent = name;
 	newPatient.appendChild(patientName);
 
@@ -87,18 +89,33 @@ function addPatient(name, conditions, phone, mail, imgUrl) {
 	newPatient.appendChild(mailElem);
 
 	const assignBtnDiv = document.createElement("div");
+	assignBtnDiv.setAttribute("class", "assign-btn");
 
 	assignBtnDiv.textContent = "Assign to selected clinical trial";
 	assignBtnDiv.addEventListener("click", (event) => {
-		const assignedParticipantList = document.createElement("ul");
-		const assignedParticipant = document.createElement("li");
-		const nameAndPhone = name + ", " + phone
-		assignedParticipant.textContent = nameAndPhone;
-		assignedParticipantList.appendChild(assignedParticipant);
-		selectedStudy.appendChild(assignedParticipantList);
-		var studyIndex = Array.prototype.indexOf.call(foundStudies.childNodes, selectedStudy)
-		state.studyToPatients[studyIndex].patients.push(nameAndPhone);
+			const patientDiv = event.target.parentNode;
+			const assignedParticipantList = document.createElement("ul");
+			const assignedParticipant = document.createElement("li");
+			const nameAndPhone = name + ", " + phone
 
+			assignedParticipant.textContent = nameAndPhone;
+			assignedParticipantList.appendChild(assignedParticipant);
+			selectedStudy.appendChild(assignedParticipantList);
+			var studyIndex = Array.prototype.indexOf.call(foundStudies.childNodes, selectedStudy)
+			state.studyToPatients[studyIndex].patients.push(nameAndPhone);
+
+			const studiesForPatientDiv = document.createElement("div");
+			const studiesForPatientDescription = document.createElement("p");
+			studiesForPatientDescription.textContent = "Assigned to studies:";
+			studiesForPatientDiv.appendChild(studiesForPatientDescription);
+
+			const studiesForPatient = document.createElement("ul");
+			const studyTitle = document.createElement("li");
+			studyTitle.textContent = selectedStudyTitle;
+			studiesForPatient.appendChild(studyTitle);
+			studiesForPatientDiv.appendChild(studiesForPatient);
+
+			patientDiv.appendChild(studiesForPatientDiv);
 		}
 	);
 	newPatient.appendChild(assignBtnDiv);
