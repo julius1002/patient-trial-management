@@ -105,11 +105,16 @@ function addPatient(name, conditions, phone, mail, imgUrl) {
 			state.studyToPatients[studyIndex].patients.push(nameAndPhone);
 
 			const studiesForPatientDiv = document.createElement("div");
-			const studiesForPatientDescription = document.createElement("p");
-			studiesForPatientDescription.textContent = "Assigned to studies:";
-			studiesForPatientDiv.appendChild(studiesForPatientDescription);
 
-			const studiesForPatient = document.createElement("ul");
+			var studiesForPatient = document.getElementById("patient-" + name + "-" + phone);
+			console.log(studiesForPatient);
+			if(!studiesForPatient) {
+				studiesForPatient = document.createElement("ul");
+				studiesForPatient.id = "patient-" + name + "-" + phone;
+				const studiesForPatientDescription = document.createElement("p");
+				studiesForPatientDescription.textContent = "Assigned to studies:";
+				studiesForPatientDiv.appendChild(studiesForPatientDescription);
+			}
 			const studyTitle = document.createElement("li");
 			studyTitle.textContent = selectedStudyTitle;
 			studiesForPatient.appendChild(studyTitle);
